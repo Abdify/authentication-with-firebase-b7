@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const Login = () => {
   const [password, setPassword] = useState("");
@@ -7,11 +9,30 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
 
+  const { setUser, login } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  console.log(location.state);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const form = e.target;
-    const password = form.password.value;
-    console.log(password);
+
+    if (emailError) {
+      e.target.email.focus();
+      return;
+    } else if (passwordError) {
+      e.target.password.focus();
+      return;
+    }
+
+    // login
+    login(email, password).then((result) => {
+      const user = result.user;
+      setUser(user);
+      navigate(location.state.pathname || "/");
+    });
   };
 
   // uncontrolled component => controlled component
@@ -41,6 +62,8 @@ const Login = () => {
     }
   };
 
+  // one way data binding
+
   return (
     <div className="mt-20">
       <form onSubmit={handleSubmit}>
@@ -69,6 +92,7 @@ const Login = () => {
           </label>
           {emailError && <span className="error">{emailError}</span>}
         </div>
+
         <div className="relative z-0 w-full mb-6 group">
           <input
             type="password"
@@ -94,6 +118,15 @@ const Login = () => {
           </label>
           {passwordError && <span className="error">{passwordError}</span>}
         </div>
+
+        <button type="submit">Login</button>
+
+        <p>
+          Don&apos;t have an account?{" "}
+          <Link to="/register" state={location.state}>
+            Register here
+          </Link>
+        </p>
       </form>
     </div>
   );

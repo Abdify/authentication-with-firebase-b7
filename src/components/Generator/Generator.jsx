@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthProvider";
 import Color from "./Color";
 import "./Generator.css";
 
@@ -25,7 +26,8 @@ const Generator = () => {
     });
   }
 
-  const user = { email: "a" };
+  const { user } = useContext(AuthContext);
+  console.log(user);
   // const navigate = useNavigate();
 
   // useEffect(() => {
