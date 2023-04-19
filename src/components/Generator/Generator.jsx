@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Color from "./Color";
 import "./Generator.css";
 
@@ -23,6 +24,16 @@ const Generator = () => {
       colors: colors,
     });
   }
+
+  const user = { email: "a" };
+  // const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/login");
+  //   }
+  // }, []);
+
   return (
     <div className="color-container">
       {state.colors.map((color, index) => (
@@ -33,6 +44,21 @@ const Generator = () => {
           hexCode={color.hexCode}
         ></Color>
       ))}
+
+      {user ? (
+        <form action="">
+          <textarea
+            name=""
+            id=""
+            cols="30"
+            rows="10"
+            className="border border-black"
+          ></textarea>
+          <button>Add your comment</button>
+        </form>
+      ) : (
+        <Link to="/login">Login first to add your comment</Link>
+      )}
     </div>
   );
 };
